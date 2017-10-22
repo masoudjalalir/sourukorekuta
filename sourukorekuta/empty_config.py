@@ -6,3 +6,7 @@ db_password = ''
 db_port = ''
 # Bot Settings
 bottoken = ''
+# Userbot Settings
+ub_api_id = ''
+ub_api_hash = ''
+ub_phone = ''
