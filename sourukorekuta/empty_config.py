@@ -1,3 +1,4 @@
+"""Settings for sourukorekuta."""
 # Database Settings
 db_host = ''
 db_name = ''

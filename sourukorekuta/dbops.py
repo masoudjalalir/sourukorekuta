@@ -1,3 +1,4 @@
+"""The Module interacting with the db."""
 import userbot
 import config
 from telegram import Chat, Bot, ChatMember
@@ -10,8 +11,11 @@ curdir = '/'.join(__file__.split('/')[:-1])
 
 
 def runsql(sql: str, data: tuple = (), mogrify: bool = False) -> str:
-    conn_string = f"""host='{config.db_host}' dbname='{config.db_name}'
-                     user='{config.db_user}' password='{config.db_password}' port='{config.db_port}'"""
+    conn_string = f"""host='{config.db_host}'
+                      dbname='{config.db_name}'
+                      user='{config.db_user}' 
+                      password='{config.db_password}' 
+                      port='{config.db_port}'"""
     conn = ps2.connect(conn_string)  # type: ps2conn
     c = conn.cursor()  # type: ps2cursor
     if mogrify:

@@ -1,3 +1,4 @@
+"""The userbot module."""
 import datetime
 import logging
 import getpass
