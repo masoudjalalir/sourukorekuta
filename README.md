@@ -4,7 +4,7 @@ This Section  describes the steps needed to get the bot working on your server.
 1. PostgreSQL Server
 2. Python 3.6+
 3. A Telegram Bot
-4. A Telegram Account (preferrably a second account)
+4. A Telegram Account
 
 ## Installation:
 ### PostgreSQL
