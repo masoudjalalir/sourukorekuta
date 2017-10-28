@@ -1,8 +1,7 @@
 #!/usr/bin/env python
+"""The Main bot file."""
 import logging
-
-import time
-
+from time import strftime, gmtime
 import config
 import sys
 from telegram import Bot, Update, Message, Chat
@@ -120,12 +119,15 @@ def info(bot: Bot, update: Update) -> None:
         msg_list = []
         msg_list.append(
                 f"Name: {userinfo['first_name']} {userinfo['last_name']}")
+        if userinfo['username'] != 'None':
+            msg_list.append(
+                    f"Username: {userinfo['username']}")
+        if userinfo['joined'] != 'None':
+            joined = strftime('%d.%m.%Y', gmtime(int(userinfo['joined'])))
+            msg_list.append(
+                f"Joined: {joined}")
         msg_list.append(
-                f"Username: {userinfo['username']}")
-        msg_list.append(
-                f"Joined: {userinfo['joined']}")
-        msg_list.append(
-                f"Language:{userinfo['language_code']}")
+                f"Language: {userinfo['language_code']}")
         msg_list.append(
                 f"Status: {userinfo['status']}")
         msg_list.append(
@@ -134,30 +136,42 @@ def info(bot: Bot, update: Update) -> None:
                 f"Total Messages:")
         msg_list.append(
                 f"Message Types:")
-        msg_list.append(
-                f"  Texts: {userinfo['count_text']}")
-        msg_list.append(
-                f"  Mentions: {userinfo['count_mention']}")
-        msg_list.append(
-                f"  Hashtags: {userinfo['count_hashtag']}")
-        msg_list.append(
-                f"  Bot Commands: {userinfo['count_bot_command']}")
-        msg_list.append(
-                f"  URLs: {userinfo['count_url']}")
-        msg_list.append(
-                f"  E-Mails: {userinfo['count_email']}")
-        msg_list.append(
-                f"  Photos: {userinfo['count_photo']}")
-        msg_list.append(
-                f"  Documents: {userinfo['count_document']}")
-        msg_list.append(
-                f"  Stickers: {userinfo['count_sticker']}")
-        msg_list.append(
-                f"  GIFs: {userinfo['count_gif']}")
-        msg_list.append(
-                f"  Video: {userinfo['count_video']}")
-        msg_list.append(
-                f"  Voice Messages: {userinfo['count_voice']}")
+        if userinfo['count_text'] != '0':
+            msg_list.append(
+                    f"  Texts: {userinfo['count_text']}")
+        if userinfo['count_mention'] != '0':
+            msg_list.append(
+                    f"  Mentions: {userinfo['count_mention']}")
+        if userinfo['count_hashtag'] != '0':
+            msg_list.append(
+                    f"  Hashtags: {userinfo['count_hashtag']}")
+        if userinfo['count_bot_command'] != '0':
+            msg_list.append(
+                    f"  Bot Commands: {userinfo['count_bot_command']}")
+        if userinfo['count_url'] != '0':
+            msg_list.append(
+                    f"  URLs: {userinfo['count_url']}")
+        if userinfo['count_email'] != '0':
+            msg_list.append(
+                    f"  E-Mails: {userinfo['count_email']}")
+        if userinfo['count_photo'] != '0':
+            msg_list.append(
+                    f"  Photos: {userinfo['count_photo']}")
+        if userinfo['count_document'] != '0':
+            msg_list.append(
+                    f"  Documents: {userinfo['count_document']}")
+        if userinfo['count_sticker'] != '0':
+            msg_list.append(
+                    f"  Stickers: {userinfo['count_sticker']}")
+        if userinfo['count_gif'] != '0':
+            msg_list.append(
+                    f"  GIFs: {userinfo['count_gif']}")
+        if userinfo['count_video'] != '0':
+            msg_list.append(
+                    f"  Video: {userinfo['count_video']}")
+        if userinfo['count_voice'] != '0':
+            msg_list.append(
+                    f"  Voice Messages: {userinfo['count_voice']}")
         message = '\n'.join(msg_list)
         msg.reply_text(message)
         bot.delete_message(chat_id=update.effective_chat.id,
@@ -239,18 +253,6 @@ def execution(bot: Bot, update: Update) -> None:
                            message_id=update.effective_message.message_id)
 
 
-def test(bot: Bot, update: Update) -> None:
-    chat = update.effective_chat  # type: Chat
-    msg = update.message  # type: Message
-    channel = userbot.get_channel(chat.title)
-    # all_user_ids = userbot.get_participants_ids(channel.id,
-                                                # channel.access_hash)
-    userbot.get_participant_by_id(285396115, channel.id,
-                                                channel.access_hash)
-    # userbot.get_participant_by_id(update.effective_chat.title, 285396115)
-
-
-
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
@@ -271,7 +273,6 @@ def main():
     dp.add_handler(CommandHandler('tamashi', stats))
     dp.add_handler(CommandHandler('jikkokeikoku', execution_warn))
     dp.add_handler(CommandHandler('jikko', execution))
-    dp.add_handler(CommandHandler('test', test))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members,
                                   check_group))
     dp.add_handler(MessageHandler(Filters.all, normal_message))
