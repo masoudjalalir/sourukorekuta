@@ -16,3 +16,14 @@ This Section describes the steps needed to get the bot working on your server.
 ### Config
 1. Copy and rename [empty_config.py](../master/sourukorekuta/empty_config.py) to `config.py`
 2. Fill out all the fields. To get a token for the Userbot follow this Tutorial: [Creating your Telegram Application](https://core.telegram.org/api/obtaining_api_id)
+
+
+## BotFather:
+If you want to autocomplete the commands send this as command list to BotFather:
+```start - starts the bot
+help - displays help for the bot
+ping - pings the bot
+joho - shows info for the user that has been replied to or the user that sent the command
+tokei - show group stats
+jikkokeikoku - tag all members subject to execution
+jikko - execute all lurkers```
