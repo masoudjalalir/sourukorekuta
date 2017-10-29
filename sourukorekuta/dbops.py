@@ -70,7 +70,7 @@ def update_user(user: User, chat: Chat, msgtype: str, joindate: int = 0) -> None
                             AND sourukorekuta.statistics.group_id = %s;
                             """, (userid, groupid)):
 
-        runsql("""INSERT INTO maindb.sourukorekuta.statistics (user_id,
+        runsql("""INSERT INTO sourukorekuta.statistics (user_id,
                                              group_id,
                                              count_text,
                                              count_mention,
@@ -198,7 +198,7 @@ def get_group(groupid: int) -> dict:
     grouptuple = runsql("""SELECT * FROM sourukorekuta.groups 
                            WHERE id = %s""", (chatid, ))[0]
     active_members = runsql("""SELECT count(user_id) 
-                              FROM maindb.sourukorekuta.statistics 
+                              FROM sourukorekuta.statistics 
                               WHERE group_id = %s
                               AND count_text > 0
                               OR count_mention > 0
@@ -214,7 +214,7 @@ def get_group(groupid: int) -> dict:
                               OR count_document > 0;""", (chatid, ))[0][0]
 
     lurkers = runsql("""SELECT count(user_id) 
-                              FROM maindb.sourukorekuta.statistics 
+                              FROM sourukorekuta.statistics 
                               WHERE group_id = %s
                               AND count_text = 0
                               OR count_mention = 0
