@@ -1,9 +1,9 @@
 # Setup:
 This Section  describes the steps needed to get the bot working on your server.
 ## Requirements:
-1. PostgreSQL Server
+1. PostgreSQL Server (Tested on 9.4 and 9.6)
 2. Python 3.6+
-3. A Telegram Bot
+3. A Telegram Bot (Use [@BotFather](t.me/botfather))
 4. A Telegram Account
 
 ## Installation:
