@@ -100,15 +100,18 @@ def bothelp(bot: Bot, update: Update) -> None:
 
 
 def ping(bot: Bot, update: Update) -> None:
-    update.message.reply_text('ポン！')
+    chat = update.effective_chat  # type: Chat
+    bot.send_message(chat_id=chat.id, text='ポン！')
     if update.effective_chat.type != 'private':
         bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
 
 def info(bot: Bot, update: Update) -> None:
+    chat = update.effective_chat  # type: Chat
+    msg = update.effective_message  # type: Message
+    usr = update.effective_user  # type: User
     if update.effective_chat.type != 'private':
-        msg = update.message  # type: Message
         if msg.reply_to_message:
             userinfo = db.get_user(bot, msg.reply_to_message.from_user.id,
                         update.effective_chat.id)
@@ -173,7 +176,7 @@ def info(bot: Bot, update: Update) -> None:
             msg_list.append(
                     f"  Voice Messages: {userinfo['count_voice']}")
         message = '\n'.join(msg_list)
-        msg.reply_text(message)
+        bot.send_message(chat_id=chat.id, text=message)
         bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
@@ -218,10 +221,9 @@ def execution_warn(bot: Bot, update: Update) -> None:
                                    message_id=msg.message_id)
                 return
             fullmsg = 'If you are on the list below you count as a lurker and will be kicked when we decide its time to do so. There is no need to discuss if it is neccesary or not.\n\n' + ', '.join(lurkersmsg)
-            msg.reply_text(fullmsg, parse_mode='Markdown')
+            bot.send_message(chat_id=chat.id, text=fullmsg, parse_mode='Markdown')
             bot.delete_message(chat_id=chat.id,
                                message_id=msg.message_id)
-
 
 @run_async
 def execution(bot: Bot, update: Update) -> None:
@@ -270,7 +272,8 @@ def main():
     dp.add_handler(CommandHandler('ping', ping))
     dp.add_handler(CommandHandler(['joho', 'info'], info))
     dp.add_handler(CommandHandler(['tokei', 'tamashi', 'stats'], stats))
-    dp.add_handler(CommandHandler(['jikkokeikoku', 'executionwarn'], execution_warn))
+    dp.add_handler(CommandHandler(['jikkokeikoku', 'executionwarn'],
+                                  execution_warn))
     dp.add_handler(CommandHandler(['jikko', 'execution'], execution))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members,
                                   check_group))
