@@ -11,3 +11,5 @@ bottoken = ''
 ub_api_id = ''
 ub_api_hash = ''
 ub_phone = ''
+# Misc
+delete_commands = True

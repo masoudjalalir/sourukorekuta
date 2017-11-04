@@ -102,7 +102,7 @@ def bothelp(bot: Bot, update: Update) -> None:
 def ping(bot: Bot, update: Update) -> None:
     chat = update.effective_chat  # type: Chat
     bot.send_message(chat_id=chat.id, text='ポン！')
-    if update.effective_chat.type != 'private':
+    if update.effective_chat.type != 'private' and config.delete_commands:
         bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
@@ -177,7 +177,8 @@ def info(bot: Bot, update: Update) -> None:
                     f"  Voice Messages: {userinfo['count_voice']}")
         message = '\n'.join(msg_list)
         bot.send_message(chat_id=chat.id, text=message)
-        bot.delete_message(chat_id=update.effective_chat.id,
+        if config.delete_commands:
+            bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
 
@@ -189,7 +190,8 @@ def stats(bot: Bot, update: Update) -> None:
         update.message.reply_text('This Group has ' +
                                   str(group['active_members_count']) +
                                   ' active souls.')
-        bot.delete_message(chat_id=update.effective_chat.id,
+        if config.delete_commands:
+            bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
 
@@ -222,7 +224,8 @@ def execution_warn(bot: Bot, update: Update) -> None:
                 return
             fullmsg = 'If you are on the list below you count as a lurker and will be kicked when we decide its time to do so. There is no need to discuss if it is neccesary or not.\n\n' + ', '.join(lurkersmsg)
             bot.send_message(chat_id=chat.id, text=fullmsg, parse_mode='Markdown')
-            bot.delete_message(chat_id=chat.id,
+            if config.delete_commands:
+                bot.delete_message(chat_id=chat.id,
                                message_id=msg.message_id)
 
 @run_async
@@ -250,8 +253,8 @@ def execution(bot: Bot, update: Update) -> None:
                                     """
                         )
                 userbot.kick_member(channel, lurker)
-
-        bot.delete_message(chat_id=update.effective_chat.id,
+        if config.delete_commands:
+            bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
 
 
