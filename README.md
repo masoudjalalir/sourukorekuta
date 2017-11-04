@@ -32,13 +32,25 @@ This section describes the steps needed to get the bot working on your server.
 
 If you want to autocomplete the commands send this as the command list to BotFather:
 
+English:
+
+    start - starts the bot
+    help - displays help for the bot
+    ping - pings the bot
+    info - shows info for the user that has been replied to or the user that sent the command
+    stats - show group stats
+    executionwarn - tag all members subject to execution
+    execution - execute all lurkers
+
+Japanese:
+
     start - starts the bot
     help - displays help for the bot
     ping - pings the bot
     joho - shows info for the user that has been replied to or the user that sent the command
     tokei - show group stats
     jikkokeikoku - tag all members subject to execution
-    jikko - execute all lurkers``
+    jikko - execute all lurkers
 
 ## Using the bot
 Add the bot as Admin to your Group. It should start working.
