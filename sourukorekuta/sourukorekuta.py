@@ -11,7 +11,7 @@ import dbops as db
 import os
 import userbot
 
-try:
+try:#
     mojurasu_prod = int(os.environ['MOJURASU_PROD'])
 except KeyError:
     mojurasu_prod = 0
@@ -246,12 +246,13 @@ def execution(bot: Bot, update: Update) -> None:
 
 
             for lurker in lurkers:
-                userbot.send_message_to_channel(
-                        f"""Kicked {bot.get_chat_member(
-                                    chat.id,
-                                    lurker).user.first_name} | {str(lurker)}
-                                    """
-                        )
+                if config.channel_log:
+                    userbot.send_message_to_channel(
+                            f"""Kicked {bot.get_chat_member(
+                                        chat.id,
+                                        lurker).user.first_name} | {str(lurker)}
+                                        """
+                            )
                 userbot.kick_member(channel, lurker)
         if config.delete_commands:
             bot.delete_message(chat_id=update.effective_chat.id,

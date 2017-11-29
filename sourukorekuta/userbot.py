@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 api_id = config.ub_api_id
 api_hash = config.ub_api_hash
 phone = config.ub_phone
-curdir = '/'.join(__file__.split('/')[:-1])
+curdir = '/'.join(__file__.split('/')[:-1]) + '/'
 client = TelegramClient(curdir + 'main_session',
                         api_id, api_hash)
 client.connect()
