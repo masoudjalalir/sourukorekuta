@@ -235,3 +235,31 @@ def get_group(groupid: int) -> dict:
              'active_members_count': active_members,
              'lurkers': lurkers}
     return group
+
+
+def whitelist_user(userid: int, groupid: int, remove: bool = False) -> None:
+    if not remove:
+        if not runsql("""SELECT * FROM sourukorekuta.whitelist 
+                         WHERE user_id = %s AND chat_id = %s;""",
+                      (str(userid), str(groupid))):
+            runsql("""INSERT INTO sourukorekuta.whitelist(user_id, chat_id) VALUES (%s, %s)""", (str(userid), str(groupid)))
+        else:
+            return
+    elif remove:
+        if runsql(
+                """SELECT * FROM sourukorekuta.whitelist 
+                   WHERE user_id = %s AND chat_id = %s;""",
+                (str(userid), str(groupid))):
+            runsql(
+                    """DELETE FROM sourukorekuta.whitelist 
+                       WHERE user_id = %s AND chat_id = %s;""",
+                    (str(userid), str(groupid)))
+
+
+def get_whitelisted_users(groupid: int) -> list:
+    chatid = str(groupid).strip()
+    whitelisted_members = runsql("""SELECT user_id 
+                               FROM sourukorekuta.whitelist 
+                               WHERE chat_id = %s;""", (str(groupid),))
+    whitelisted_members = [int(user[0]) for user in whitelisted_members]
+    return whitelisted_members

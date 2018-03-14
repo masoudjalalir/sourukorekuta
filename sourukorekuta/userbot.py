@@ -36,7 +36,7 @@ def get_participants_ids(channel: Channel,
     result = client(GetParticipantsRequest(channel,
                                            ChannelParticipantsSearch(''),
                                            0,
-                                           10000))
+                                           10000, 5))
     if not raw_users:
         ids = [user.id for user in result.users if not user.bot]
         return ids

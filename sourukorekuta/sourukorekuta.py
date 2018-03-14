@@ -11,7 +11,7 @@ import dbops as db
 import os
 import userbot
 
-try:#
+try:
     mojurasu_prod = int(os.environ['MOJURASU_PROD'])
 except KeyError:
     mojurasu_prod = 0
@@ -202,11 +202,13 @@ def execution_warn(bot: Bot, update: Update) -> None:
     if chat.type != 'private':
         admins = chat.get_administrators()
         admins = [admin.user.id for admin in admins]
+
         if update.effective_user.id in admins:
             channel = userbot.get_channel(chat.title)
             all_user_ids = userbot.get_participants_ids(channel)
             # all_user_ids = userbot.get_participants_ids(0, 0)
-            active_user_ids = db.get_active_user_ids(chat.id)
+            whitelisted = db.get_whitelisted_users(chat.id)
+            active_user_ids = db.get_active_user_ids(chat.id) + whitelisted
             lurkers = [lurker for lurker in all_user_ids
                        if lurker not in active_user_ids]
             lurkersmsg = [f"""[{bot.get_chat_member(
@@ -218,7 +220,9 @@ def execution_warn(bot: Bot, update: Update) -> None:
                           for l in lurkers]
             # msg.reply_text(lurkers, parse_mode='Markdown')
             if not lurkersmsg:
-                msg.reply_text('I detected no lurking Souls')
+                bot.send_message(chat_id=chat.id,
+                                 text='I detected no lurking Souls',
+                                 parse_mode='Markdown')
                 bot.delete_message(chat_id=chat.id,
                                    message_id=msg.message_id)
                 return
@@ -240,7 +244,9 @@ def execution(bot: Bot, update: Update) -> None:
             channel = userbot.get_channel(chat.title)
             all_user_ids = userbot.get_participants_ids(channel)
             # all_user_ids = userbot.get_participants_ids(0, 0)
-            active_user_ids = db.get_active_user_ids(chat.id)
+            whitelisted = db.get_whitelisted_users(chat.id)
+
+            active_user_ids = db.get_active_user_ids(chat.id) + whitelisted
             lurkers = [lurker for lurker in all_user_ids
                        if lurker not in active_user_ids]
 
@@ -257,6 +263,18 @@ def execution(bot: Bot, update: Update) -> None:
         if config.delete_commands:
             bot.delete_message(chat_id=update.effective_chat.id,
                            message_id=update.effective_message.message_id)
+
+def whitelist(bot: Bot, update: Update, args: list) -> None:
+    chat = update.effective_chat  # type: Chat
+    msg = update.effective_message  # type: Message
+    usr = update.effective_user  # type: User
+    if args[0] == '+':
+        db.whitelist_user(args[1], chat.id)
+        bot.send_message(chat_id=chat.id, text='User added to the Whitelist', parse_mode='Markdown')
+    elif args[0] == '-':
+        db.whitelist_user(args[1], chat.id, remove=True)
+        bot.send_message(chat_id=chat.id, text='User removed from the Whitelist',
+                         parse_mode='Markdown')
 
 
 def error(bot, update, error):
@@ -278,6 +296,8 @@ def main():
     dp.add_handler(CommandHandler(['tokei', 'tamashi', 'stats'], stats))
     dp.add_handler(CommandHandler(['jikkokeikoku', 'executionwarn'],
                                   execution_warn))
+    dp.add_handler(CommandHandler(['howaitorisuto', 'whitelist'],
+                                  whitelist, pass_args=True))
     dp.add_handler(CommandHandler(['jikko', 'execution'], execution))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members,
                                   check_group))

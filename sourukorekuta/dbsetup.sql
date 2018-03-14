@@ -31,3 +31,8 @@ CREATE TABLE sourukorekuta.users
     last_name TEXT,
     username TEXT
 );
+CREATE TABLE sourukorekuta.whitelist
+(
+    user_id TEXT,
+    chat_id TEXT
+);
